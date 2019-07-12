@@ -1,0 +1,64 @@
+p {
+	color: #0000ff;
+}
+
+.text-red {
+	color: #ff0000;
+}
+
+#title {
+	color: #00ffff;
+}
+
+[class=text-red] {
+	color: #ff0000;
+}
+
+h3,
+h6,
+div {
+	color: #ffc0cb;
+}
+
+ul li {
+	color: #0000ff;
+}
+
+ol li {
+	color: #ff0000;
+}
+
+ol > li {
+	color: #ff8c00;
+}
+
+a:hover {
+	color: #ff0000;
+}
+
+input:focus {
+	color: #00ffff;
+}
+
+p {
+	background-color: #0000ff;
+	background-image: url('./kieu-anh-hera-3.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	border: 5px dotted #ff0000;
+	border-radius: 100%;
+	/* width: 100px;
+	height: 100px; */
+}
+
+span {
+	width: 99999px;
+	height: 99999px;
+	background-color: #0000ff;
+}
+
+div {
+	padding: 40px 20px 15px 5px;
+	margin: 40px 20px 15px 5px;
+}
