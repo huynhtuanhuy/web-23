@@ -1,0 +1,22 @@
+- users:
+    - id
+    - password
+    - email
+    - username
+    - avatar
+- images:
+    - id
+    - photo
+    - name
+    - description
+    - userId
+    - commentId
+    - views
+    - date
+    - likes
+- comments:
+    - id
+    - userId
+    - content
+    - date
+    - imageId

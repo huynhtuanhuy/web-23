@@ -49,6 +49,34 @@ app.get('/questioninfo/:questionId', function(request, response) {
 	response.send(question);
 });
 
+app.get('/randomquestion', function (req, res) {
+	const questionList = JSON.parse(fs.readFileSync('questions.json', { encoding: 'utf-8' }));
+	const randomIndex = Math.floor(Math.random()*questionList.length);
+	const randomQuestion = questionList[randomIndex];
+
+	res.send(randomQuestion);
+});
+
+app.post('/vote/:questionId', function (req, res) {
+	const vote = req.body.vote;
+	const questionId = req.params.questionId;
+	const questionList = JSON.parse(fs.readFileSync('questions.json', { encoding: 'utf-8' }));
+	console.log("Vote: ", vote)
+	for (let i = 0; i < questionList.length; i++) {
+		if(questionList[i].id == questionId) {
+			if (vote == 'yes') {
+				questionList[i].yes += 1;
+			} else if (vote == 'no') {
+				questionList[i].no += 1;
+			}
+		}
+	}
+
+	fs.writeFileSync('questions.json', JSON.stringify(questionList));
+
+	res.redirect('http://localhost:5000/chi-tiet?questionId='+questionId);
+});
+
 const port = 6789;
 app.listen(port, function (err) {
 	if(err) console.log(err)
