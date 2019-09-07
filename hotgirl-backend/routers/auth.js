@@ -24,7 +24,11 @@ AuthRouter.post('/login', (req, res) => {
                 res.json({ success: 0, message: 'Không tồn tại người dùng có username này!' });
             } else {
                 if (bcrypt.compareSync(password, userFound.password)) {
-                    res.json({ success: 1, message: 'Đăng nhập thành công!' });
+                    res.json({
+                        success: 1,
+                        message: 'Đăng nhập thành công!',
+                        user: { username }
+                    });
                 } else {
                     res.json({ success: 0, message: 'Sai mật khẩu!' });
                 }
