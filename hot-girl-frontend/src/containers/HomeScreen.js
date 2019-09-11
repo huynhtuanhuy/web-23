@@ -26,7 +26,7 @@ class HomeScreen extends Component {
   _onSearchChanged = text => this.setState({ searchString: text });
 
   render() {
-    const displayedImages = this.state.images.filter(
+    const displayedImages = [] || this.state.images.filter(
       img =>
         img.title.includes(this.state.searchString) ||
         img.description.includes(this.state.searchString)
@@ -39,6 +39,7 @@ class HomeScreen extends Component {
           username={this.props.username}
           onLogin={this.props.onLogin}
         />
+        Home
         <MainContent images={displayedImages} />
       </div>
     );

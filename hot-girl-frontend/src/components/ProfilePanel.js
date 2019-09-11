@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from 'react-router-dom';
 
 class ProfilePanel extends Component {
   render() {
@@ -7,12 +8,14 @@ class ProfilePanel extends Component {
         <span className="navbar-text">Welcome, {this.props.username}</span>
       </div>
     ) : (
-      <button
-        className="btn btn-primary btn-block"
-        onClick={this.props.onLogin}
-      >
-        Login
-      </button>
+      <Link to="/login">
+        <button
+          className="btn btn-primary btn-block"
+          // onClick={this.props.onLogin}
+        >
+          Login
+        </button>
+      </Link>
     );
     return <div className="col-3 profile_panel text-right">{display}</div>;
   }

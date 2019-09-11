@@ -24,10 +24,18 @@ AuthRouter.post('/login', (req, res) => {
                 res.json({ success: 0, message: 'Không tồn tại người dùng có username này!' });
             } else {
                 if (bcrypt.compareSync(password, userFound.password)) {
+                    req.session.user = {
+                        username,
+                        id: userFound._id,
+                    };
+
                     res.json({
                         success: 1,
                         message: 'Đăng nhập thành công!',
-                        user: { username }
+                        user: {
+                            username,
+                            id: userFound._id,
+                        }
                     });
                 } else {
                     res.json({ success: 0, message: 'Sai mật khẩu!' });
@@ -36,6 +44,21 @@ AuthRouter.post('/login', (req, res) => {
         }).catch(err => {
             res.json({ success: 0, message: 'Đã có lỗi xảy ra!' });
         });
+});
+
+AuthRouter.get('/check', (req, res) => {
+    if (req.session.user) {
+        res.send({
+            success: 1,
+            message: 'Người dùng đã đăng nhập',
+            user: req.session.user
+        });
+    } else {
+        res.send({
+            success: 0,
+            message: 'Người dùng chưa đăng nhập'
+        });
+    }
 });
 
 module.exports = AuthRouter;

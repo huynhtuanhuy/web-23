@@ -6,31 +6,58 @@ import axios from "./axios";
 
 import HomeScreen from "./containers/HomeScreen";
 import DetailScreen from "./containers/DetailScreen";
+import LoginScreen from "./containers/LoginScreen";
 
-import { BrowserRouter, Route } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 
 class App extends Component {
-  state = {};
+  state = {
+    username: '',
+    id: '',
+  };
 
-  _onLogin = () => {
+  componentDidMount() {
+    // Check login
+    axios.get("http://localhost:6969/api/auth/check")
+      .then(response => {
+        if (response.data.success) {
+          this.setState({
+            username: response.data.user.username,
+            id: response.data.user.id
+          });
+        } else {
+          this.props.history.push("/login");
+        }
+      }).catch(error => {
+
+      });
+  }
+
+  _onLogin = (username, password) => {
     axios
-      .post("/api/auth", {
-        username: "admin",
-        password: "123456"
+      .post("http://localhost:6969/api/auth/login", {
+        username: username,
+        password: password
       })
-      .then(response =>
-        this.setState({
-          username: response.data.username,
-          id: response.data.id
-        })
-      )
+      .then(response => {
+        if (response.data.success) {
+          this.setState({
+            username: response.data.user.username,
+            id: response.data.user.id
+          });
+          this.props.history.push("/");
+        } else {
+          alert(response.data.message);
+        }
+        console.log(response.data);
+      })
       .catch(err => console.error(err));
   };
 
   render() {
     return (
-      <BrowserRouter>
-        <div className="App">
+      <div className="App">
+        <Switch>
           <Route
             exact
             path="/"
@@ -52,10 +79,25 @@ class App extends Component {
               />;
             }}
           />
-        </div>
-      </BrowserRouter>
+          <Route
+            path="/login"
+            render={props => {
+              if (this.state.username) {
+                props.history.push("/");
+                return "";
+              }
+
+              return <LoginScreen
+                {...props}
+                username={this.state.username}
+                onLogin={this._onLogin}
+              />;
+            }}
+          />
+        </Switch>
+      </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
