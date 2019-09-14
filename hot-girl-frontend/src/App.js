@@ -18,7 +18,8 @@ class App extends Component {
 
   componentDidMount() {
     // Check login
-    axios.get("http://localhost:6969/api/auth/check")
+    const access_token = window.localStorage.getItem("access_token");
+    axios.get("http://localhost:6969/api/auth/check?access_token="+access_token)
       .then(response => {
         if (response.data.success) {
           this.setState({
@@ -41,6 +42,7 @@ class App extends Component {
       })
       .then(response => {
         if (response.data.success) {
+          window.localStorage.setItem("access_token", response.data.access_token)
           this.setState({
             username: response.data.user.username,
             id: response.data.user.id

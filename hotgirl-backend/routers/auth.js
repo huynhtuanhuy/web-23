@@ -1,6 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const AuthRouter = express.Router();
+
+const jwtSecret = "sadu&^123i897au&Y*&";
 
 const userModel = require('../models/users');
 
@@ -24,14 +27,18 @@ AuthRouter.post('/login', (req, res) => {
                 res.json({ success: 0, message: 'Không tồn tại người dùng có username này!' });
             } else {
                 if (bcrypt.compareSync(password, userFound.password)) {
-                    req.session.user = {
-                        username,
-                        id: userFound._id,
-                    };
+                    // Login with sesssion
+                    // req.session.user = {
+                    //     username,
+                    //     id: userFound._id,
+                    // };
+
+                    const access_token = jwt.sign({ username, id: userFound._id }, jwtSecret)
 
                     res.json({
                         success: 1,
                         message: 'Đăng nhập thành công!',
+                        access_token,
                         user: {
                             username,
                             id: userFound._id,
@@ -46,7 +53,17 @@ AuthRouter.post('/login', (req, res) => {
         });
 });
 
+// Logout with session
+// AuthRouter.delete('/logout', (req, res) => {
+//     req.session.user = null;
+//     req.session.destroy();
+//     res.json({ success: 1, message: 'Đăng xuất thành công!' });
+// });
+
 AuthRouter.get('/check', (req, res) => {
+    const access_token = req.query.access_token;
+    console.log(access_token);
+
     if (req.session.user) {
         res.send({
             success: 1,
